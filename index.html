@@ -1,0 +1,1157 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>The rules of REST API</title>
+  <style type="text/css">
+    @font-face {
+  font-family: 'Inconsolata';
+  src: local('Inconsolata Regular'), url(theme/font/inconsonlata.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Noto Sans';
+  src: local('Noto Sans'), local('NotoSans'), url(theme/font/notosans.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Hind';
+  src: local('Hind Light'), local('Hind-Light'), url(theme/font/hind.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Symbola';
+  src: url('theme/font/Symbola_hint.ttf') format('truetype');
+}
+
+/* Theme Styles */
+body {
+  font-family: 'Noto Sans', 'Symbola', sans-serif;
+  font-weight: 300;
+  font-size: 150%;
+  color: #000;
+}
+
+.center {
+  text-align: center;
+}
+
+/* The following is needed for the ESC overview slide selection */
+.slides {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.slides.active .slide:not(.hidden) {
+  border: 22px solid #F5D380;
+}
+
+.slide-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9;
+  cursor: pointer;
+  display: none;
+}
+
+.slides.active .slide:hover .slide-overlay::before {
+  content: '▶';
+  text-align: center;
+  line-height: 300px;
+  font-size: 200px;
+  color: #fff;
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.slides.active .slide:hover .slide-overlay{
+  display: block;
+  background: rgba(0,0,0,0.5);
+}
+.slide-wrapper {
+  margin: 7px;
+  transition: all 250ms;
+}
+
+/* Presentation Styles */
+.slide {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 2rem;
+  z-index: 1;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #FFF;
+}
+
+.slide-content {
+  z-index: 2;
+  opacity: 1;
+  max-width: 85vw;
+  max-height: 85vh;
+  margin: 0 auto 0;
+  font-size: 200%;
+  font-weight: 200;
+  line-height: 1.375;
+  overflow: hidden;
+}
+
+.slide-content svg[id^=mermaid] {
+  margin: auto;
+  display: block;
+  max-height: 60vh;
+}
+
+svg[id^=mermaid] .cluster rect {
+  fill: white!important;
+  stroke: #F5D380!important;
+}
+svg[id^=mermaid] .cluster text {
+  transform: translateY(.5em);
+  stroke: #00A69F;
+}
+svg[id^=mermaid] .node rect {
+  stroke: none;
+}
+svg[id^=mermaid] span.edgeLabel {
+  color: #333;
+}
+svg[id^=mermaid] span.edgeLabel:not(:empty) {
+  padding: 0 .3em;
+}
+
+
+.controls {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 3;
+}
+
+.controls .overview {
+  display: inline-block;
+  float: left;
+  color: #C7C7C7;
+  margin-right: 15px;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 30px;
+  cursor: pointer;
+}
+.controls .overview:hover {
+  color: #00A69F;
+}
+.controls .arrow {
+  float: left;
+  height: 0;
+  width: 0;
+  margin-right: 15px;
+  border: 15px solid #C7C7C7;
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+
+.controls .prev {
+  border-top-color: transparent;
+  border-right-width: 25px;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-left-width: 0;
+}
+
+.controls .next {
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-right-width: 0;
+  border-bottom-color: transparent;
+  border-left-width: 25px;
+}
+
+.controls .prev:hover {
+  border-right-color: #00A69F;
+  cursor: pointer;
+}
+
+.controls .next:hover {
+  border-left-color: #00A69F;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3 {
+  margin: 1rem 0;
+  font-family: 'Hind', sans-serif;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 300%;
+  text-align: center;
+}
+
+h2 {
+  font-size: 200%;
+  font-weight: 200;
+  text-align: center;
+  margin-top: 2em;
+  color: #00A69F;
+}
+small {
+  color: #C7C7C7;
+  font-size: 80%;
+}
+h2 small {
+  display: block;
+}
+
+h3 {
+  font-size: 140%;
+  padding-bottom: 1rem;
+  border-bottom: 1px ridge currentColor;
+}
+
+ul, ol {
+  padding-left: 6rem;
+}
+
+blockquote {
+  padding-left: 20px;
+  margin-left: 0;
+  background: #efefef;
+  border-left: 5px solid #00A69F;
+  border-radius: 0 3px 3px 0;
+}
+
+blockquote p {
+  padding: .5em;
+  color: #000;
+}
+
+small {
+  font-size: 60%;
+}
+
+.left {
+  float: left;
+  width: 48%;
+}
+
+.right {
+  float: right;
+  width: 48%;
+}
+
+.float-right {
+  float: right;
+}
+
+.author h1 {
+  margin: 2em 0 1em;
+  font-size: 170%;
+  font-weight: 200;
+  text-align: center;
+}
+
+.author h3 {
+  font-weight: 100;
+  text-align: center;
+  border: none;
+}
+
+a {
+  word-break: break-all;
+  text-decoration: none;
+  color: #00A69F;
+}
+
+hr {
+  border: 1px solid #00A69F;
+}
+
+
+table td,
+table th {
+  padding-right: 3em;
+  text-align: left;
+}
+
+.progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  z-index: 2;
+}
+
+.progress-bar {
+  height: 3px;
+  width: 0;
+  background-color: #00A69F;
+  -webkit-transition: width .15s ease-out;
+     -moz-transition: width .15s ease-out;
+       -o-transition: width .15s ease-out;
+          transition: width .15s ease-out;
+}
+
+.hidden,
+.slide-content svg[id^=mermaid].hidden {
+  display: none;
+}
+
+/* Code Highlighting */
+
+.editor .wrap-guide {
+  background: rgba(255, 255, 255, 0.1);
+}
+.editor .indent-guide {
+  color: rgba(255, 255, 255, 0.15);
+}
+.editor,
+.editor .gutter {
+  background-color: #282828;
+  color: #F8F8F2;
+}
+.editor.is-focused .cursor {
+  border-color: #F8F8F0;
+}
+.editor.is-focused .selection .region {
+  background-color: #49483E;
+}
+.editor.is-focused .line-number.cursor-line-no-selection {
+  background-color: #49483E;
+}
+.editor .invisible-character {
+  color: rgba(215, 215, 215, 0.15);
+}
+.editor .comment {
+  color: #75715E;
+}
+.editor .string {
+  color: #E6DB74;
+}
+.editor .constant.numeric {
+  color: #AE81FF;
+}
+.editor .constant.language {
+  color: #AE81FF;
+}
+.editor .constant.character,
+.editor .constant.other {
+  color: #AE81FF;
+}
+.editor .keyword {
+  color: #F92672;
+}
+.editor .storage {
+  color: #F92672;
+}
+.editor .storage.type {
+  font-style: italic;
+  color: #66D9EF;
+}
+.editor .entity.name.class {
+  text-decoration: underline;
+  color: #A6E22E;
+}
+.editor .entity.other.inherited-class {
+  font-style: italic;
+  text-decoration: underline;
+  color: #A6E22E;
+}
+.editor .entity.name.function {
+  color: #A6E22E;
+}
+.editor .entity.name.instance {
+  color: #66D9EF;
+}
+.editor .variable.parameter {
+  font-style: italic;
+  color: #FD971F;
+}
+.editor .entity.name.tag {
+  color: #F92672;
+}
+.editor .entity.other.attribute-name {
+  color: #A6E22E;
+}
+.editor .support.function {
+  color: #66D9EF;
+}
+.editor .support.constant {
+  color: #66D9EF;
+}
+.editor .support.type,
+.editor .support.class {
+  font-style: italic;
+  color: #66D9EF;
+}
+.editor .invalid {
+  color: #F8F8F0;
+  background-color: #F92672;
+}
+.editor .invalid.deprecated {
+  color: #F8F8F0;
+  background-color: #AE81FF;
+}
+.editor .class.jade {
+  color: #AE81FF;
+}
+
+code pre {
+  display: block;
+  margin: 1rem 0;
+  padding: 1rem;
+  font-family: 'Inconsolata';
+  font-weight: 400;
+  overflow: hidden;
+  font-size: 80%;
+  line-height: 1.2;
+}
+
+rect.actor {
+  fill: white;
+}
+
+.messageLine1,
+marker[id$=-crosshead] path {
+  fill: lightgrey;
+  stroke: lightgrey;
+}
+.messageLine1 {
+  animation: dash 200s linear;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -2000;
+  }
+}
+
+/* Responsiveness */
+@media (max-width: 850px) {
+  body {
+    font-size: 70%;
+  }
+
+  .slide {
+    padding: 50px;
+  }
+  p:last-of-type a {
+    bottom: 60px;
+  }
+
+  .slide-content {
+    width: auto;
+  }
+
+  .prev,
+  .prev:hover {
+    border-right-color: rgba(135, 135, 135, .5);
+  }
+
+  .next,
+  .next:hover {
+    border-left-color: rgba(135, 135, 135, .5);
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    overflow: hidden;
+    font-size: 50%;
+  }
+
+  .slide {
+    padding: 10px;
+  }
+  p:last-of-type a {
+    bottom: 15px;
+  }
+  .slide-content {
+    height: 340px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  h1 {
+    margin-top: 50px;
+  }
+
+  ul {
+    padding-left: 25px;
+  }
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+  }
+
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  .hidden {
+    display: block;
+  }
+
+  html {
+    height: 100%;
+    width: 100%;
+    overflow: visible;
+  }
+
+  body {
+    float: none !important;
+    padding: 0;
+    margin: 0 auto !important;
+    overflow: visible;
+    background: none !important;
+    border: 0;
+  }
+
+  .progress,
+  .controls {
+    display: none;
+  }
+
+  .slide-wrapper {
+    width: 100%;
+    height: 20.95cm;
+    margin: 0;
+    page-break-before: always;
+    page-break-inside: avoid;
+    page-break-after: always;
+  }
+
+  .slide {
+    position: relative;
+    height: 100%;
+  }
+
+  .slide-content {
+    margin: 0;
+    overflow: visible;
+  }
+}
+
+.slide {
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-origin: padding-box;
+  background-image: url(theme/img/footer.png);
+}
+.author-slide {
+  background-size: 20vw;
+  background-image: url(theme/img/soap.png);
+}
+#slide-18 {
+  animation: tyler 3s;
+  background-size: 100%, 20vw;
+  background-image: url(theme/img/footer.png), url(theme/img/tyler.png);
+}
+@keyframes tyler {
+  0%,99% {
+    background-size: 100%, 0;
+  }
+}
+
+#slide-1 h1 {
+  color: #00A69F;
+  margin-top: 1em;
+}
+#slide-1 h1 img { width: 1.4em; height: 1.4em; vertical-align: bottom; }
+
+#slide-1 h2 {
+  color: #C7C7C7;
+  margin-top: 1em;
+}
+
+.author-slide {
+  color: #00A69F;
+}
+.author-slide .url a,
+.author-slide .email a {
+  color: #C7C7C7;
+}
+
+  </style>
+</head>
+<body>
+    <div class="progress">
+    <div class="progress-bar"></div>
+  </div>
+
+<div class="slides">
+    <div class="slide-wrapper">
+      <div class="slide" id="slide-1">
+        <div data-id="1" class="slide-overlay"></div>
+        <section class="slide-content"><h1 id="rest-api-theme-img-logo-svg-">REST API @ <img src="theme/img/logo.svg" alt="@"></h1>
+<h2 id="rules-feedback">Rules &amp; Feedback</h2>
+<script type="presenter/text">
+Le groupe API REST a pour but de produire et maintenir les API utilisée par les produits de partage Oodrive, il a commencé lors de leur refonte il y a 4 ans.
+
+Architectes, dev serveur et clients (mobile, lourd et web) se réunissent chaque semaine 30m et maintiennent la documentation dans un repo git dédié.
+
+Le rôle de responsable tourne régulièrement.
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-2">
+        <div data-id="2" class="slide-overlay"></div>
+        <section class="slide-content"><h2 id="-small-1st-rule-small-you-document-rest-api"><small>1st rule</small> You document REST API</h2>
+<script type="presenter/text">
+Une API doit être documentée...
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-3">
+        <div data-id="3" class="slide-overlay"></div>
+        <section class="slide-content"><blockquote>
+<p>Contract between backend and clients</p>
+</blockquote>
+<ul>
+<li>MUST be human readable</li>
+<li>SHOULD be easy to write</li>
+<li>MAY use <a href="http://json-schema.org/implementations.html">json-schema</a></li>
+</ul>
+<script type="presenter/text">
+La documentation doit être accessible (HTML), facile à écrire (plus de detail après) et idéalement générer un json-schema qui permet:
+- tests auto
+- validation des données coté serveur
+- de typer coté client
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-4">
+        <div data-id="4" class="slide-overlay"></div>
+        <section class="slide-content"><h2 id="-small-2nd-rule-small-you-document-rest-api"><small>2nd rule</small> You DOCUMENT REST API</h2>
+<script type="presenter/text">
+La Documentation en premier!
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-5">
+        <div data-id="5" class="slide-overlay"></div>
+        <section class="slide-content"><p>The Waterfall mess </p>
+<pre><code class="lang-mermaid">graph LR
+  b0 -.- c1
+  c1 -. feedback .- b1
+  b2 -.update .- c2
+  subgraph Clients
+    c1(feature)
+    c2(deploy)
+  end
+  subgraph Backend
+    b0(API)
+    b1(other task)
+    b1 -. switch .- b2(API)
+  end</code></pre>
+<script>
+document.currentScript.parentNode.addEventListener('mermaid', event => {
+  event.target.querySelector('#subGraph0 text').setAttribute('x', '-280')
+  event.target.querySelector('#subGraph1 text').setAttribute('x', '-120')
+})
+</script>
+
+<script type="presenter/text">
+Le cycle de vie classique de création d'une API...
+Problèmes, bien que l'API soit très vite disponible,
+la fonctionnalité met longtemps a être dépoyée et 
+c'est fustrant aussi bien pour les serveurs que les clients.
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-6">
+        <div data-id="6" class="slide-overlay"></div>
+        <section class="slide-content"><p>vs. Documentation First</p>
+<pre><code class="lang-mermaid">graph LR
+  a0 -. mock .- c1
+  a0 -.- b1
+  b1 -. plug .- c2
+  subgraph API Doc
+    a0(contract)
+  end
+  subgraph Clients
+    c1(feature) -.- c2(deploy)
+  end
+  subgraph Backend
+    b1(API)
+  end</code></pre>
+<script>
+document.currentScript.parentNode.addEventListener('mermaid', event => {
+  event.target.querySelector('#subGraph1 text').setAttribute('x', '-120')
+  event.target.querySelector('.edgePath:nth-child(4)').remove()
+})
+</script>
+
+<script type="presenter/text">
+L'effort commun permet de se mettre d'accord et de travailler en même temps sur la fonctionnalité, le résultat attendu: livraison rapide et de qualité.
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-7">
+        <div data-id="7" class="slide-overlay"></div>
+        <section class="slide-content"><h2 id="-small-3rd-rule-small-if-backend-or-clients-says-nbsp-stop-fight-is-over"><small>3rd rule</small> If backend or clients says&nbsp;&quot;stop&quot;, fight is over</h2>
+<script type="presenter/text">
+Trouver un concensus entre serveur et clients ?!
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-8">
+        <div data-id="8" class="slide-overlay"></div>
+        <section class="slide-content"><blockquote>
+<p>API expectations</p>
+</blockquote>
+<ol>
+<li>Usable <small>for clients</small></li>
+<li>Maintainable <small>by backend</small></li>
+<li>Extendable <small>to features</small></li>
+</ol>
+<p><small>or it&#39;s a potential dead end</small></p>
+<script type="presenter/text">
+En réalité, ce concensus n'est pas évident à obtenir:
+entre les client qui veulent l'intégralité des données en une requête, svp
+et le serveur qui veut éviter le code spagetti et maintenir des perfs décente...
+
+Il faut toujours garder en tête ces 3 propriétés:
+utilisable, maintenable et extensible.
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-9">
+        <div data-id="9" class="slide-overlay"></div>
+        <section class="slide-content"><h2 id="-small-4th-rule-small-only-two-kind-of-mr"><small>4th rule</small> Only two kind of MR</h2>
+<script type="presenter/text">
+Comment maintient-on la documentaion des API ?
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-10">
+        <div data-id="10" class="slide-overlay"></div>
+        <section class="slide-content"><blockquote>
+<p>Branch convention</p>
+</blockquote>
+<p>to sync API &amp; doc</p>
+<ul>
+<li>implemented<small>/descriptive_branch_name</small></li>
+<li>proposal<small>/descriptive_branch_name</small></li>
+</ul>
+<p>We use <a href="https://github.com/lesfurets/git-octopus">Git Octopus</a> <small>for preview</small></p>
+<script type="presenter/text">
+On traite différement les branches d'améliorations de la documentation (formulation, limitations et erreurs mal documentées, etc) que l'on revoit et merge immédiatement;
+des branches qui documentent les ajouts et modifications, celles-ci sont discutée pour atteindre un concensus et sont mergée juste après l'implémentation.
+
+La documentation reste synchronisée avec l'implémentation. On peut avoir un aperçu de la documentation à venir en mergeant toutes les branches en cours grae à Git Octopus.
+
+Merci à Alexandre Dubreuil, des furets, de nous l'avoir présenté lors des précédents Open R&Days!
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-11">
+        <div data-id="11" class="slide-overlay"></div>
+        <section class="slide-content"><h2 id="-small-5th-rule-small-one-tooling-at-a-time"><small>5th rule</small> One tooling at a time</h2>
+</section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-12">
+        <div data-id="12" class="slide-overlay"></div>
+        <section class="slide-content"><blockquote>
+<p>Tooling review</p>
+</blockquote>
+<p><font>&nbsp;&nbsp;&nbsp;&nbsp;😭</font> <a href="https://apiblueprint.org">apiblueprint</a> <small>&amp; <a href="https://github.com/danielgtaylor/aglio">aglio</a> sucks</small></p>
+<p><font>&nbsp;&nbsp;&nbsp;&nbsp;😔</font> <a href="https://raml.org">raml</a> <small>has ecosystem issues</small></p>
+<p><font>&nbsp;&nbsp;&nbsp;&nbsp;😎</font> <a href="https://www.openapis.org">openAPI</a> <small>&amp; <a href="https://swagger.io/">swagger</a> wins</small></p>
+<script type="presenter/text">
+On a utilise les 3.
+
+Historiquement apiblueprint, ça semble remplir les critères (accessible, facile à écrire et json-schema). En pratique, ce n'est pas le cas: beaucoup de bugs, et de limitations.
+Analogie: ça semble etre une voiture, c'est une 'trotinette'.
+
+A la marge, Raml, le format est bien mais les outils ne sont pas assez maintenu.
+C'est une voiture, dont le modèle n'est plus produit.
+
+Aujourd'hui, on mise sur openApi (utilisé sur les nouveaux projets, commence la migration de l'historique):
+- adapté à la documentation en premier (et génération à partir du code)
+- outils nombreux et maintenus
+- compat json-schema
+- swagger UI permet de tester l'API depuis la doc
+C'est une voiture, avec la clim ;)
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-13">
+        <div data-id="13" class="slide-overlay"></div>
+        <section class="slide-content"><h2 id="-small-6th-rule-small-no-complexity-no-nbsp-contradiction"><small>6th rule</small> No complexity, no&nbsp;contradiction</h2>
+</section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-14">
+        <div data-id="14" class="slide-overlay"></div>
+        <section class="slide-content"><blockquote>
+<p>KISS</p>
+</blockquote>
+<ul>
+<li>entities <small>MUST be</small> consistent</li>
+<li>complex <small>solutions</small> DON&#39;T last</li>
+<li><small>SHOULD use</small> simple <small>&amp;</small> standard <small>solutions</small></li>
+</ul>
+<script type="presenter/text">
+On a appris de nos erreurs
+
+content negociation avec des représentations basiques & complètes: abandonné
+système d'embed pour éviter des duplications: trop complexe, utilisé sur un seul endpoint
+hyperliens: pas utilisé
+
+pagination avec header link rel=next link: Ok
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-15">
+        <div data-id="15" class="slide-overlay"></div>
+        <section class="slide-content"><h2 id="-small-7th-rule-small-api-version-will-go-on-br-as-long-as-they-have-to"><small>7th rule</small> API version will go on<br>as long as they have to</h2>
+</section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-16">
+        <div data-id="16" class="slide-overlay"></div>
+        <section class="slide-content"><blockquote>
+<p>API versioning</p>
+</blockquote>
+<ul>
+<li><small>client&#39;s</small> short support <small>policy</small></li>
+<li><small>long term</small> deprecation <small>notice</small></li>
+<li><small>delay &amp; batch</small> breaking changes</li>
+</ul>
+<p>We are moving from silos to <a href="https://www.oodrive.com/products/oodrive-platform">plateform</a>,<br>
+major versions expected!</p>
+<script type="presenter/text">
+C'est un chantier en cours.
+
+Nous entrons dans un phase d'uniformisation de toutes nos API:
+On commence par la représentation des utilisateurs et des fichiers.
+
+Une politique de support claire et des méchanisme de mise à jour auto des clients
+est indispensable pour pouvoir faire évoluer les API.
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-17">
+        <div data-id="17" class="slide-overlay"></div>
+        <section class="slide-content"><h2 id="-small-8th-rule-small-if-this-is-your-first-meeting-br-you-have-to-write-doc"><small>8th rule</small> If this is your first meeting,<br> you HAVE to write doc</h2>
+</section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden" id="slide-18">
+        <div data-id="18" class="slide-overlay"></div>
+        <section class="slide-content"><h2 id="thanks">Thanks</h2>
+<center>© <a href="http://www.diggingforfire.net/fightclub">The Rules of Fight Club</a></center>
+
+<script type="presenter/text">
+Daniel, Arthur ...
+
+Questions / Suggestions @ apéro
+</script></section>
+      </div>
+    </div>
+    <div class="slide-wrapper">
+      <div class="slide hidden author-slide" id="slide-19">
+        <div data-id="19" class="slide-overlay"></div>
+        <section class="slide-content"><div class="author">
+  <h1 class="name">I&#39;m Adrien, in charge of Sharing REST API group</h1>
+    <h3 class="email">
+      <a href="mailto:a.gibrat@oodrive.com">a.gibrat@oodrive.com</a>
+    </h3>
+</div>
+</section>
+      </div>
+    </div>
+</div>
+
+
+
+    <script async src="http://localhost:35729/livereload.js"></script>
+
+  <script type="text/javascript"src="theme/mermaid.min.js"></script>
+
+  <script type="text/javascript">
+    /**
+ * Returns the current page number of the presentation.
+ */
+function currentPosition() {
+  return parseInt(document.querySelector('.slide:not(.hidden)').id.slice(6));
+}
+
+/**
+ * Navigates forward n pages
+ * If n is negative, we will navigate in reverse
+ */
+function navigate(n) {
+  var position = currentPosition();
+  var numSlides = document.getElementsByClassName('slide').length;
+
+  var $fragments = document.querySelectorAll('#slide-' + position + ' .fragment');
+  var fragmentsFinished = false;
+  if ($fragments.length) {
+    if (n > 0) {
+      var $f = document.querySelectorAll('#slide-' + position + ' .fragment.hidden');
+      if (!$f.length) fragmentsFinished = true;
+      else $f[0].classList.remove('hidden');
+    } else {
+      var $f = document.querySelectorAll('#slide-' + position + ' .fragment:not(.hidden)');
+      if (!$f.length) fragmentsFinished = true;
+      else $f[$f.length - 1].classList.add('hidden');
+    }
+  } else {
+    fragmentsFinished = true;
+  }
+
+  if (fragmentsFinished) {
+    /* Positions are 1-indexed, so we need to add and subtract 1 */
+    var nextPosition = (position - 1 + n) % numSlides + 1;
+
+    /* Normalize nextPosition in-case of a negative modulo result */
+    nextPosition = (nextPosition - 1 + numSlides) % numSlides + 1;
+
+    document.getElementById('slide-' + position).classList.add('hidden');
+    document.getElementById('slide-' + nextPosition).classList.remove('hidden');
+    position = nextPosition
+    updateProgress();
+    updateURL();
+    updateTabIndex();
+  }
+  document.getElementById('slide-' + position).dispatchEvent(new Event('navigate', { bubbles: true }))
+}
+
+/**
+ * Updates the current URL to include a hashtag of the current page number.
+ */
+function updateURL() {
+  try {
+    window.history.replaceState({}, null, '#' + currentPosition());
+  } catch (e) {
+    window.location.hash = currentPosition();
+  }
+}
+
+/**
+ * Sets the progress indicator.
+ */
+function updateProgress() {
+  var progressBar = document.querySelector('.progress-bar');
+
+  if (progressBar !== null) {
+    var numSlides = document.getElementsByClassName('slide').length;
+    var position = currentPosition() - 1;
+    var percent = (numSlides === 1) ? 100 : 100 * position / (numSlides - 1);
+    progressBar.style.width = percent.toString() + '%';
+  }
+}
+
+/**
+ * Removes tabindex property from all links on the current slide, sets
+ * tabindex = -1 for all links on other slides. Prevents slides from appearing
+ * out of control.
+ */
+function updateTabIndex() {
+  var allLinks = document.querySelectorAll('.slide a');
+  var position = currentPosition();
+  var currentPageLinks = document.getElementById('slide-' + position).querySelectorAll('a');
+  var i;
+
+  for (i = 0; i < allLinks.length; i++) {
+    allLinks[i].setAttribute('tabindex', -1);
+  }
+
+  for (i = 0; i < currentPageLinks.length; i++) {
+    currentPageLinks[i].removeAttribute('tabindex');
+  }
+}
+
+/**
+ * Determines whether or not we are currently in full screen mode
+ */
+function isFullScreen() {
+  return document.fullscreenElement ||
+    document.mozFullScreenElement ||
+    document.webkitFullscreenElement ||
+    document.msFullscreenElement;
+}
+
+/**
+ * Toggle fullScreen mode on document element.
+ * Works on chrome (>= 15), firefox (>= 9), ie (>= 11), opera(>= 12.1), safari (>= 5).
+ */
+function toggleFullScreen() {
+  /* Convenient renames */
+  var docElem = document.documentElement;
+  var doc = document;
+
+  docElem.requestFullscreen =
+    docElem.requestFullscreen ||
+    docElem.msRequestFullscreen ||
+    docElem.mozRequestFullScreen ||
+    docElem.webkitRequestFullscreen.bind(docElem, Element.ALLOW_KEYBOARD_INPUT);
+
+  doc.exitFullscreen =
+    doc.exitFullscreen ||
+    doc.msExitFullscreen ||
+    doc.mozCancelFullScreen ||
+    doc.webkitExitFullscreen;
+
+  isFullScreen() ? doc.exitFullscreen() : docElem.requestFullscreen();
+}
+
+const initMermaid = (selector, config) => {
+  mermaid.initialize(config)
+  document.querySelectorAll(selector).forEach(node =>
+    mermaid.render(
+      `mermaid${Date.now()}`
+      , node.textContent
+      , markup => {
+        const svg = new DOMParser().parseFromString(markup, 'image/svg+xml').firstChild
+        svg.removeAttribute('style') // remove max-with
+        svg.querySelectorAll('marker').forEach(marker => { // fix arrow heads
+          const markerId = marker.id
+          const uniqueMarkerId = `${svg.id}-${marker.id}`
+          marker.id = uniqueMarkerId
+          svg.querySelectorAll(`[marker-end="url(#${markerId})"]`)
+            .forEach(line => line.setAttribute('marker-end', `url(#${uniqueMarkerId})`))
+          })
+        node.parentNode.replaceWith(svg) // pre code.lang-mermaid
+        svg.dispatchEvent(new Event('mermaid', { bubbles: true }))
+      }
+    )
+  )
+}
+
+const initPresenterText = (selector) => {
+  document.addEventListener('navigate', event => {
+    const lastPosition = document.getElementsByClassName('slide').length
+    if (currentPosition() === lastPosition)  return;
+    console.clear()
+    event.target.querySelectorAll('h1,h2,h3,p,li').forEach(node => console.log(`%c${node.innerText.trim()}`, 'font-size:large;font-weight:bold; color:darkgrey'))
+    event.target.querySelectorAll(selector).forEach(node => console.info(`%c${node.textContent.trim()}`, 'font-size:large'))
+    console.log(`%c${currentPosition()}/${document.getElementsByClassName('slide').length} ${new Intl.DateTimeFormat('en', {hour: 'numeric', minute: 'numeric', hour12: false, timeZone: 'Europe/Paris'}).format(new Date())}`, 'font-style:italic')
+  })
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Update the tabindex to prevent weird slide transitioning
+  updateTabIndex()
+
+  initMermaid('.lang-mermaid', { theme: 'neutral' })
+
+  initPresenterText('script[type="presenter/text"]')
+
+  // If the location hash specifies a page number, go to it.
+  var page = window.location.hash.slice(1)
+  if (page) {
+    navigate(parseInt(page) - 1);
+  }
+
+  document.onkeydown = (e) => {
+    if(e.target.tagName.toLowerCase() === 'textarea') return
+    var kc = e.keyCode
+
+    // left, down, H, J, backspace, PgUp - BACK
+    // up, right, K, L, space, PgDn - FORWARD
+    // enter - FULLSCREEN
+    if (kc === 37 || kc === 40 || kc === 8 || kc === 72 || kc === 74 || kc === 33) {
+      navigate(-1)
+    } else if (kc === 38 || kc === 39 || kc === 32 || kc === 75 || kc === 76 || kc === 34) {
+      navigate(1)
+    } else if (kc === 13) {
+      toggleFullScreen()
+    } else if (kc === 27) {
+      toggleOverview()
+    }
+  }
+
+  if (document.querySelector('.next') && document.querySelector('.prev')) {
+    document.querySelector('.next').onclick = (e) => {
+      e.preventDefault()
+      navigate(1)
+    }
+
+    document.querySelector('.prev').onclick = (e) => {
+      e.preventDefault()
+      navigate(-1)
+    }
+  }
+  if (document.querySelector('.overview')) {
+    document.querySelector('.overview').onclick = toggleOverview
+  }
+
+  document.querySelectorAll('.slide-overlay').forEach($overlay => {
+    $overlay.onclick = event => {
+      navigate(parseInt(event.target.dataset.id) - currentPosition())
+      toggleOverview()
+    }
+  })
+
+  document.querySelectorAll('.fragment').forEach($fragment => {
+    $fragment.classList.add('hidden')
+  })
+
+})
+
+function toggleOverview() {
+  if (window.$style !== undefined) {
+    window.$style.remove()
+    delete window.$style
+    document.querySelector('.slides').classList.remove('active')
+  } else {
+    const $slides = document.querySelector('.slides')
+    $slides.classList.add('active')
+    const slidesList = document.querySelectorAll('.slide-wrapper')
+
+    const w = window,
+      d = document,
+      e = d.documentElement,
+      g = d.getElementsByTagName('body')[0],
+      x = w.innerWidth || e.clientWidth || g.clientWidth,
+      y = w.innerHeight || e.clientHeight || g.clientHeight
+
+    w.$style = d.createElement('style')
+    w.$style.innerHTML = '.slide-wrapper {width: ' + (x * 0.25) + 'px; height: ' + (y * 0.25) + 'px; } body .slide {width: ' + x + 'px; height: ' + y + 'px; position: relative; transform: scale(0.25,0.25); transform-origin: 0 0; } .slide.hidden{display: block; }'
+    d.getElementsByTagName('head')[0].appendChild(w.$style)
+  }
+}
+
+  </script>
+</body>
+</html>
