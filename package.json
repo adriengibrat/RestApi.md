@@ -4,6 +4,7 @@
   "description": "The rules of REST API, feedback about how we build REST API @ Oodrive - Open R&Days #2",
   "scripts": {
     "start": "cleaver watch README.md",
+    "build": "cleaver README.md",
     "//": "Don't use the ugly hack below in real life ;)",
     "postinstall": "git reset -- node_modules/cleaver/lib/index.js"
   },

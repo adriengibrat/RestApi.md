@@ -210,7 +210,7 @@ h2 {
   color: #00A69F;
 }
 small {
-  color: #C7C7C7;
+  color: #333;
   font-size: 80%;
 }
 h2 small {
@@ -275,6 +275,10 @@ a {
   word-break: break-all;
   text-decoration: none;
   color: #00A69F;
+}
+
+acronym {
+  text-decoration: none;
 }
 
 hr {
@@ -579,7 +583,7 @@ marker[id$=-crosshead] path {
 #slide-1 h1 img { width: 1.4em; height: 1.4em; vertical-align: bottom; }
 
 #slide-1 h2 {
-  color: #C7C7C7;
+  color: #333;
   margin-top: 1em;
 }
 
@@ -588,7 +592,7 @@ marker[id$=-crosshead] path {
 }
 .author-slide .url a,
 .author-slide .email a {
-  color: #C7C7C7;
+  color: #333;
 }
 
   </style>
@@ -604,22 +608,14 @@ marker[id$=-crosshead] path {
         <div data-id="1" class="slide-overlay"></div>
         <section class="slide-content"><h1 id="rest-api-theme-img-logo-svg-">REST API @ <img src="theme/img/logo.svg" alt="@"></h1>
 <h2 id="rules-feedback">Rules &amp; Feedback</h2>
-<script type="presenter/text">
-Le groupe API REST a pour but de produire et maintenir les API utilisée par les produits de partage Oodrive, il a commencé lors de leur refonte il y a 4 ans.
-
-Architectes, dev serveur et clients (mobile, lourd et web) se réunissent chaque semaine 30m et maintiennent la documentation dans un repo git dédié.
-
-Le rôle de responsable tourne régulièrement.
-</script></section>
+</section>
       </div>
     </div>
     <div class="slide-wrapper">
       <div class="slide hidden" id="slide-2">
         <div data-id="2" class="slide-overlay"></div>
         <section class="slide-content"><h2 id="-small-1st-rule-small-you-document-rest-api"><small>1st rule</small> You document REST API</h2>
-<script type="presenter/text">
-Une API doit être documentée...
-</script></section>
+</section>
       </div>
     </div>
     <div class="slide-wrapper">
@@ -633,21 +629,14 @@ Une API doit être documentée...
 <li>SHOULD be easy to write</li>
 <li>MAY use <a href="http://json-schema.org/implementations.html">json-schema</a></li>
 </ul>
-<script type="presenter/text">
-La documentation doit être accessible (HTML), facile à écrire (plus de detail après) et idéalement générer un json-schema qui permet:
-- tests auto
-- validation des données coté serveur
-- de typer coté client
-</script></section>
+</section>
       </div>
     </div>
     <div class="slide-wrapper">
       <div class="slide hidden" id="slide-4">
         <div data-id="4" class="slide-overlay"></div>
         <section class="slide-content"><h2 id="-small-2nd-rule-small-you-document-rest-api"><small>2nd rule</small> You DOCUMENT REST API</h2>
-<script type="presenter/text">
-La Documentation en premier!
-</script></section>
+</section>
       </div>
     </div>
     <div class="slide-wrapper">
@@ -672,13 +661,6 @@ document.currentScript.parentNode.addEventListener('mermaid', event => {
   event.target.querySelector('#subGraph0 text').setAttribute('x', '-280')
   event.target.querySelector('#subGraph1 text').setAttribute('x', '-120')
 })
-</script>
-
-<script type="presenter/text">
-Le cycle de vie classique de création d'une API...
-Problèmes, bien que l'API soit très vite disponible,
-la fonctionnalité met longtemps a être dépoyée et 
-c'est fustrant aussi bien pour les serveurs que les clients.
 </script></section>
       </div>
     </div>
@@ -704,10 +686,6 @@ document.currentScript.parentNode.addEventListener('mermaid', event => {
   event.target.querySelector('#subGraph1 text').setAttribute('x', '-120')
   event.target.querySelector('.edgePath:nth-child(4)').remove()
 })
-</script>
-
-<script type="presenter/text">
-L'effort commun permet de se mettre d'accord et de travailler en même temps sur la fonctionnalité, le résultat attendu: livraison rapide et de qualité.
 </script></section>
       </div>
     </div>
@@ -715,9 +693,7 @@ L'effort commun permet de se mettre d'accord et de travailler en même temps sur
       <div class="slide hidden" id="slide-7">
         <div data-id="7" class="slide-overlay"></div>
         <section class="slide-content"><h2 id="-small-3rd-rule-small-if-backend-or-clients-says-nbsp-stop-fight-is-over"><small>3rd rule</small> If backend or clients says&nbsp;&quot;stop&quot;, fight is over</h2>
-<script type="presenter/text">
-Trouver un concensus entre serveur et clients ?!
-</script></section>
+</section>
       </div>
     </div>
     <div class="slide-wrapper">
@@ -727,56 +703,39 @@ Trouver un concensus entre serveur et clients ?!
 <p>API expectations</p>
 </blockquote>
 <ol>
-<li>Usable <small>for clients</small></li>
+<li>Usable <small>for clients (mobile, desktop, browser)</small></li>
 <li>Maintainable <small>by backend</small></li>
 <li>Extendable <small>to features</small></li>
 </ol>
-<p><small>or it&#39;s a potential dead end</small></p>
-<script type="presenter/text">
-En réalité, ce concensus n'est pas évident à obtenir:
-entre les client qui veulent l'intégralité des données en une requête, svp
-et le serveur qui veut éviter le code spagetti et maintenir des perfs décente...
-
-Il faut toujours garder en tête ces 3 propriétés:
-utilisable, maintenable et extensible.
-</script></section>
+</section>
       </div>
     </div>
     <div class="slide-wrapper">
       <div class="slide hidden" id="slide-9">
         <div data-id="9" class="slide-overlay"></div>
-        <section class="slide-content"><h2 id="-small-4th-rule-small-only-two-kind-of-mr"><small>4th rule</small> Only two kind of MR</h2>
-<script type="presenter/text">
-Comment maintient-on la documentaion des API ?
-</script></section>
+        <section class="slide-content"><h2 id="-small-4th-rule-small-only-two-kind-of-acronym-title-merge-request-lang-en-mr-acronym-"><small>4th rule</small> Only two kind of <acronym title="Merge Request" lang="en">MR</acronym></h2>
+</section>
       </div>
     </div>
     <div class="slide-wrapper">
       <div class="slide hidden" id="slide-10">
         <div data-id="10" class="slide-overlay"></div>
         <section class="slide-content"><blockquote>
-<p>Branch convention</p>
+<p>Sync API &amp; doc</p>
 </blockquote>
-<p>to sync API &amp; doc</p>
+<p><small>with a</small> branch convention</p>
 <ul>
 <li>implemented<small>/descriptive_branch_name</small></li>
 <li>proposal<small>/descriptive_branch_name</small></li>
 </ul>
-<p>We use <a href="https://github.com/lesfurets/git-octopus">Git Octopus</a> <small>for preview</small></p>
-<script type="presenter/text">
-On traite différement les branches d'améliorations de la documentation (formulation, limitations et erreurs mal documentées, etc) que l'on revoit et merge immédiatement;
-des branches qui documentent les ajouts et modifications, celles-ci sont discutée pour atteindre un concensus et sont mergée juste après l'implémentation.
-
-La documentation reste synchronisée avec l'implémentation. On peut avoir un aperçu de la documentation à venir en mergeant toutes les branches en cours grae à Git Octopus.
-
-Merci à Alexandre Dubreuil, des furets, de nous l'avoir présenté lors des précédents Open R&Days!
-</script></section>
+<p><small>We use</small> <a href="https://github.com/lesfurets/git-octopus">Git Octopus</a> <small>for preview</small></p>
+</section>
       </div>
     </div>
     <div class="slide-wrapper">
       <div class="slide hidden" id="slide-11">
         <div data-id="11" class="slide-overlay"></div>
-        <section class="slide-content"><h2 id="-small-5th-rule-small-one-tooling-at-a-time"><small>5th rule</small> One tooling at a time</h2>
+        <section class="slide-content"><h2 id="-small-5th-feedback-small-one-tooling-at-a-time"><small>5th feedback</small> One tooling at a time</h2>
 </section>
       </div>
     </div>
@@ -789,28 +748,13 @@ Merci à Alexandre Dubreuil, des furets, de nous l'avoir présenté lors des pr�
 <p><font>&nbsp;&nbsp;&nbsp;&nbsp;😭</font> <a href="https://apiblueprint.org">apiblueprint</a> <small>&amp; <a href="https://github.com/danielgtaylor/aglio">aglio</a> sucks</small></p>
 <p><font>&nbsp;&nbsp;&nbsp;&nbsp;😔</font> <a href="https://raml.org">raml</a> <small>has ecosystem issues</small></p>
 <p><font>&nbsp;&nbsp;&nbsp;&nbsp;😎</font> <a href="https://www.openapis.org">openAPI</a> <small>&amp; <a href="https://swagger.io/">swagger</a> wins</small></p>
-<script type="presenter/text">
-On a utilise les 3.
-
-Historiquement apiblueprint, ça semble remplir les critères (accessible, facile à écrire et json-schema). En pratique, ce n'est pas le cas: beaucoup de bugs, et de limitations.
-Analogie: ça semble etre une voiture, c'est une 'trotinette'.
-
-A la marge, Raml, le format est bien mais les outils ne sont pas assez maintenu.
-C'est une voiture, dont le modèle n'est plus produit.
-
-Aujourd'hui, on mise sur openApi (utilisé sur les nouveaux projets, commence la migration de l'historique):
-- adapté à la documentation en premier (et génération à partir du code)
-- outils nombreux et maintenus
-- compat json-schema
-- swagger UI permet de tester l'API depuis la doc
-C'est une voiture, avec la clim ;)
-</script></section>
+</section>
       </div>
     </div>
     <div class="slide-wrapper">
       <div class="slide hidden" id="slide-13">
         <div data-id="13" class="slide-overlay"></div>
-        <section class="slide-content"><h2 id="-small-6th-rule-small-no-complexity-no-nbsp-contradiction"><small>6th rule</small> No complexity, no&nbsp;contradiction</h2>
+        <section class="slide-content"><h2 id="-small-6th-feedback-small-no-graphql-no-gateway"><small>6th feedback</small> No GraphQL, no Gateway</h2>
 </section>
       </div>
     </div>
@@ -818,28 +762,20 @@ C'est une voiture, avec la clim ;)
       <div class="slide hidden" id="slide-14">
         <div data-id="14" class="slide-overlay"></div>
         <section class="slide-content"><blockquote>
-<p>KISS</p>
+<p>Considered alternatives</p>
 </blockquote>
 <ul>
-<li>entities <small>MUST be</small> consistent</li>
-<li>complex <small>solutions</small> DON&#39;T last</li>
-<li><small>SHOULD use</small> simple <small>&amp;</small> standard <small>solutions</small></li>
+<li><a href="https://samnewman.io/patterns/architectural/bff">Backend For Frontend</a> <small>maintenance issues</small></li>
+<li><a href="https://graphql.org">GraphQL</a> <small>performance concerns</small></li>
+<li><a href="http://microservices.io/patterns/apigateway.html">API Gateway</a> <small>not ready yet</small></li>
 </ul>
-<script type="presenter/text">
-On a appris de nos erreurs
-
-content negociation avec des représentations basiques & complètes: abandonné
-système d'embed pour éviter des duplications: trop complexe, utilisé sur un seul endpoint
-hyperliens: pas utilisé
-
-pagination avec header link rel=next link: Ok
-</script></section>
+</section>
       </div>
     </div>
     <div class="slide-wrapper">
       <div class="slide hidden" id="slide-15">
         <div data-id="15" class="slide-overlay"></div>
-        <section class="slide-content"><h2 id="-small-7th-rule-small-api-version-will-go-on-br-as-long-as-they-have-to"><small>7th rule</small> API version will go on<br>as long as they have to</h2>
+        <section class="slide-content"><h2 id="-small-7th-strike-rule-strike-small-api-talks-will-go-on-br-as-long-as-they-have-to"><small>7th <strike>rule</strike></small> API talks will go on<br>as long as they have to</h2>
 </section>
       </div>
     </div>
@@ -847,30 +783,22 @@ pagination avec header link rel=next link: Ok
       <div class="slide hidden" id="slide-16">
         <div data-id="16" class="slide-overlay"></div>
         <section class="slide-content"><blockquote>
-<p>API versioning</p>
+<p>So much more...</p>
 </blockquote>
 <ul>
-<li><small>client&#39;s</small> short support <small>policy</small></li>
-<li><small>long term</small> deprecation <small>notice</small></li>
-<li><small>delay &amp; batch</small> breaking changes</li>
+<li><small>simple and durable</small> API design </li>
+<li><small>set up</small> API versioning</li>
+<li><small>importance of</small> entities consistency</li>
+<li><small>usefull</small> standards <small>and tricky ones</small></li>
+<li><small>from </small> silos to <a href="https://www.oodrive.com/products/oodrive-platform">plateform</a></li>
 </ul>
-<p>We are moving from silos to <a href="https://www.oodrive.com/products/oodrive-platform">plateform</a>,<br>
-major versions expected!</p>
-<script type="presenter/text">
-C'est un chantier en cours.
-
-Nous entrons dans un phase d'uniformisation de toutes nos API:
-On commence par la représentation des utilisateurs et des fichiers.
-
-Une politique de support claire et des méchanisme de mise à jour auto des clients
-est indispensable pour pouvoir faire évoluer les API.
-</script></section>
+</section>
       </div>
     </div>
     <div class="slide-wrapper">
       <div class="slide hidden" id="slide-17">
         <div data-id="17" class="slide-overlay"></div>
-        <section class="slide-content"><h2 id="-small-8th-rule-small-if-this-is-your-first-meeting-br-you-have-to-write-doc"><small>8th rule</small> If this is your first meeting,<br> you HAVE to write doc</h2>
+        <section class="slide-content"><h2 id="-small-8th-rule-small-if-this-is-your-first-api-nbsp-meeting-br-you-have-to-write-doc"><small>8th rule</small> If this is your first API&nbsp;meeting,<br> you HAVE to write doc</h2>
 </section>
       </div>
     </div>
@@ -878,20 +806,14 @@ est indispensable pour pouvoir faire évoluer les API.
       <div class="slide hidden" id="slide-18">
         <div data-id="18" class="slide-overlay"></div>
         <section class="slide-content"><h2 id="thanks">Thanks</h2>
-<center>© <a href="http://www.diggingforfire.net/fightclub">The Rules of Fight Club</a></center>
-
-<script type="presenter/text">
-Daniel, Arthur ...
-
-Questions / Suggestions @ apéro
-</script></section>
+<center>© <a href="http://www.diggingforfire.net/fightclub">The Rules of Fight Club</a></center></section>
       </div>
     </div>
     <div class="slide-wrapper">
       <div class="slide hidden author-slide" id="slide-19">
         <div data-id="19" class="slide-overlay"></div>
         <section class="slide-content"><div class="author">
-  <h1 class="name">I&#39;m Adrien, in charge of Sharing REST API group</h1>
+  <h1 class="name">I&#39;m Adrien, facilitator of the Sharing REST API group</h1>
     <h3 class="email">
       <a href="mailto:a.gibrat@oodrive.com">a.gibrat@oodrive.com</a>
     </h3>
@@ -903,7 +825,6 @@ Questions / Suggestions @ apéro
 
 
 
-    <script async src="http://localhost:35729/livereload.js"></script>
 
   <script type="text/javascript"src="theme/mermaid.min.js"></script>
 

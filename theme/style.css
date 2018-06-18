@@ -203,7 +203,7 @@ h2 {
   color: #00A69F;
 }
 small {
-  color: #C7C7C7;
+  color: #333;
   font-size: 80%;
 }
 h2 small {
@@ -268,6 +268,10 @@ a {
   word-break: break-all;
   text-decoration: none;
   color: #00A69F;
+}
+
+acronym {
+  text-decoration: none;
 }
 
 hr {
@@ -572,7 +576,7 @@ marker[id$=-crosshead] path {
 #slide-1 h1 img { width: 1.4em; height: 1.4em; vertical-align: bottom; }
 
 #slide-1 h2 {
-  color: #C7C7C7;
+  color: #333;
   margin-top: 1em;
 }
 
@@ -581,5 +585,5 @@ marker[id$=-crosshead] path {
 }
 .author-slide .url a,
 .author-slide .email a {
-  color: #C7C7C7;
+  color: #333;
 }
