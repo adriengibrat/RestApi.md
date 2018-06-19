@@ -1,6 +1,6 @@
 {
   "name": "RestApi.md",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The rules of REST API, feedback about how we build REST API @ Oodrive - Open R&Days #2",
   "scripts": {
     "start": "cleaver watch README.md",
